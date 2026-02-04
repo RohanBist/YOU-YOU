@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You, My Valentine ❤️</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --pink: #ffb6c1;
+            --soft-pink: #ffccd5;
+            --lavender: #e6ccea;
+            --cream: #fff0f5;
+            --blush: #f8b7cd;
+            --text: #5a4a4a;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffccd5, #ffb6c1, #ff9ebb);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Floating hearts background */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: rgba(255, 182, 193, 0.25);
+            font-size: 24px;
+            animation: floatHeart linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Floating music control */
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            z-index: 100;
+            cursor: pointer;
+            box-shadow: 0 4px 12px var(--shadow);
+            transition: all 0.3s ease;
+            border: 2px solid var(--blush);
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+            background-color: white;
+        }
+
+        /* Hero section */
+        .hero {
+            min-height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            max-width: 800px;
+            width: 100%;
+            margin-top: 10px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-text {
+            font-size: 2rem;
+            line-height: 1.4;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+            background: linear-gradient(to right, #ff6b9d, #ff3e6d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 300;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Photo section */
+        .photo-section {
+            width: 100%;
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 15px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .photo-frame {
+            border-radius: 12px;
+            overflow: hidden;
+            border: 3px solid white;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            background-color: white;
+            transition: all 0.4s ease;
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            aspect-ratio: 1 / 1;
+        }
+
+        .photo-frame.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Make all photos same size - square */
+        .photo-frame {
+            width: 100%;
+            height: auto;
+        }
+
+        .photo-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 10px;
+            text-align: center;
+            font-weight: 600;
+            color: #d46a8c;
+            font-size: 1rem;
+            backdrop-filter: blur(5px);
+            border-top: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .photo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+            background-color: #fff9fb;
+        }
+
+        .photo-frame:hover .photo-img {
+            transform: scale(1.08);
+        }
+
+        .photo-frame:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-color: var(--blush);
+        }
+
+        /* Message section */
+        .message-section {
+            max-width: 600px;
+            width: 100%;
+            margin: 30px auto;
+            padding: 25px;
+            background-color: rgba(255, 255, 255, 0.92);
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+            z-index: 10;
+        }
+
+        .message-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .message-text {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            text-align: center;
+            font-family: 'Segoe Script', 'Brush Script MT', cursive;
+            color: #8a5a5a;
+        }
+
+        /* Question section */
+        .question-section {
+            max-width: 600px;
+            width: 100%;
+            margin: 30px auto 50px;
+            padding: 25px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+            z-index: 10;
+        }
+
+        .question-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .question-text {
+            font-size: 2rem;
+            margin-bottom: 35px;
+            color: #ff3e6d;
+            font-weight: 300;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .valentine-button {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 16px rgba(255, 107, 157, 0.4);
+            font-weight: 600;
+            min-width: 160px;
+            position: relative;
+            z-index: 20;
+        }
+
+        .yes-button {
+            background: linear-gradient(to right, #ff6b9d, #ff3e6d);
+            color: white;
+        }
+
+        .of-course-button {
+            background: linear-gradient(to right, #ff9ebb, #ff7eb3);
+            color: white;
+        }
+
+        .valentine-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(255, 107, 157, 0.5);
+        }
+
+        /* Heart animation */
+        .heart-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            display: none;
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff3e6d;
+            font-size: 24px;
+            opacity: 0;
+            animation: heartAnimation 2s ease-out forwards;
+        }
+
+        @keyframes heartAnimation {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(0.5);
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateY(-100px) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-200px) scale(0.8);
+            }
+        }
+
+        /* Enhanced Response message */
+        .response-message {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 204, 213, 0.95), rgba(255, 182, 193, 0.95), rgba(255, 158, 187, 0.95));
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeInBackground 0.5s ease;
+        }
+
+        @keyframes fadeInBackground {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .response-content {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 4px solid var(--blush);
+            position: relative;
+            overflow: hidden;
+            animation: popIn 0.7s ease;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .response-content::before {
+            content: "❤️";
+            position: absolute;
+            font-size: 80px;
+            opacity: 0.1;
+            top: 10px;
+            left: 10px;
+            transform: rotate(-15deg);
+        }
+
+        .response-content::after {
+            content: "💖";
+            position: absolute;
+            font-size: 70px;
+            opacity: 0.1;
+            bottom: 10px;
+            right: 10px;
+            transform: rotate(15deg);
+        }
+
+        .response-text {
+            font-size: 2.2rem;
+            color: #ff3e6d;
+            margin-bottom: 30px;
+            line-height: 1.4;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+        }
+
+        .response-subtext {
+            font-size: 1.2rem;
+            color: #b8708a;
+            margin-bottom: 35px;
+            font-style: italic;
+            font-family: 'Segoe Script', 'Brush Script MT', cursive;
+        }
+
+        .close-button {
+            padding: 15px 40px;
+            background: linear-gradient(to right, #ff6b9d, #ff3e6d);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(255, 107, 157, 0.5);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .close-button:hover {
+            transform: scale(1.08);
+            box-shadow: 0 10px 25px rgba(255, 107, 157, 0.6);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 15px;
+            padding: 15px;
+            text-align: center;
+            color: #b8708a;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Responsive adjustments for mobile */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-gap: 12px;
+            }
+            
+            .photo-frame {
+                border-radius: 10px;
+            }
+            
+            .hero {
+                min-height: 40vh;
+                margin-top: 5px;
+            }
+            
+            .hero-text {
+                font-size: 1.7rem;
+            }
+            
+            .message-text {
+                font-size: 1.2rem;
+            }
+            
+            .question-text {
+                font-size: 1.7rem;
+                margin-bottom: 25px;
+            }
+            
+            .valentine-button {
+                padding: 14px 28px;
+                font-size: 1.2rem;
+                min-width: 140px;
+            }
+            
+            .photo-label {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+            
+            .message-section, .question-section {
+                padding: 20px;
+                margin: 20px auto;
+            }
+            
+            .response-content {
+                padding: 30px 25px;
+            }
+            
+            .response-text {
+                font-size: 1.8rem;
+            }
+            
+            .response-subtext {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .button-container {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+            
+            .valentine-button {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-gap: 10px;
+            }
+            
+            .hero-text {
+                font-size: 1.5rem;
+            }
+            
+            .question-text {
+                font-size: 1.5rem;
+            }
+            
+            .music-control {
+                top: 15px;
+                right: 15px;
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+            
+            .response-text {
+                font-size: 1.6rem;
+            }
+            
+            .response-subtext {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 350px) {
+            .photo-grid {
+                grid-template-columns: 1fr;
+                max-width: 250px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating hearts background -->
+    <div class="floating-hearts" id="floatingHearts"></div>
+    
+    <!-- Floating music control -->
+    <div class="music-control" id="musicControl">
+        <i class="fas fa-music"></i>
+    </div>
+
+    <!-- Hero section -->
+    <section class="hero">
+        <div class="hero-text" id="heroText">
+            Hey...<br>
+            I made this just for you ❤️
+        </div>
+    </section>
+
+    <!-- Photo section -->
+    <section class="photo-section">
+        <div class="photo-grid">
+            <div class="photo-frame" id="photo1">
+                <img src="1.jpeg" alt="Us Together" class="photo-img">
+                <div class="photo-label">Ussss Together</div>
+            </div>
+            <div class="photo-frame" id="photo2">
+                <img src="2.jpeg" alt="Your Smile" class="photo-img">
+                <div class="photo-label">My Beautiful Girl</div>
+            </div>
+            <div class="photo-frame" id="photo3">
+                <img src="3.jpeg" alt="My Favorite Person" class="photo-img">
+                <div class="photo-label">Mero Cutieeee</div>
+            </div>
+            <div class="photo-frame" id="photo4">
+                <img src="4.jpeg" alt="My Happy Place" class="photo-img">
+                <div class="photo-label">Mero Pretyyyy Baby</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Message section -->
+    <section class="message-section" id="messageSection">
+        <div class="message-text">
+            I might be a little late to say this<br>
+            but my feeling for you have just kept growing with time,<br>
+            I love how much you mean to me and how naturally you make me care.<br>
+            This is my first Valentine, and I want to spend it with you — and only you — now and in the future.<br>
+            so...........<br>
+
+        </div>
+</section>
+
+    <!-- Question section -->
+    <section class="question-section" id="questionSection">
+        <div class="question-text">
+            Will you be my Valentine? 💖
+        </div>
+        <div class="button-container">
+            <button class="valentine-button yes-button" id="yesButton">Yes 💕</button>
+            <button class="valentine-button of-course-button" id="ofCourseButton">Of course 😳</button>
+        </div>
+    </section>
+
+    <!-- Heart animation container -->
+    <div class="heart-container" id="heartContainer"></div>
+
+    <!-- Enhanced Response message -->
+    <div class="response-message" id="responseMessage">
+        <div class="response-content">
+            <div class="response-text">
+                USSSSSSSSSSS Together Forever! ❤️
+            </div>
+            <div class="response-subtext">
+                I can't wait to celebrate with you, my love!
+            </div>
+            <button class="close-button" id="closeButton">Wanna go back! 😘</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        Made with love for someone special
+    </footer>
+
+    <!-- Audio for background music -->
+    <audio id="backgroundMusic" loop>
+        <source src="Valentines.webm" type="audio/webm">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-serene-view-443.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        // DOM Elements
+        const musicControl = document.getElementById('musicControl');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const heroText = document.getElementById('heroText');
+        const photoFrames = document.querySelectorAll('.photo-frame');
+        const messageSection = document.getElementById('messageSection');
+        const questionSection = document.getElementById('questionSection');
+        const yesButton = document.getElementById('yesButton');
+        const ofCourseButton = document.getElementById('ofCourseButton');
+        const heartContainer = document.getElementById('heartContainer');
+        const responseMessage = document.getElementById('responseMessage');
+        const closeButton = document.getElementById('closeButton');
+        const floatingHearts = document.getElementById('floatingHearts');
+        
+        // Initialize music state
+        let isPlaying = false;
+        
+        // Start with music paused
+        backgroundMusic.volume = 0.3;
+        
+        // Create floating hearts background
+        function createFloatingHearts() {
+            const heartCount = 20;
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
+                heart.innerHTML = '❤️';
+                
+                // Random position
+                const left = Math.random() * 100;
+                heart.style.left = `${left}%`;
+                
+                // Random animation duration
+                const duration = 12 + Math.random() * 15;
+                heart.style.animationDuration = `${duration}s`;
+                
+                // Random size
+                const size = 0.7 + Math.random() * 1.3;
+                heart.style.fontSize = `${24 * size}px`;
+                
+                // Random color variation - more pink
+                const colors = [
+                    'rgba(255, 182, 193, 0.3)',
+                    'rgba(255, 158, 179, 0.25)',
+                    'rgba(255, 126, 179, 0.3)',
+                    'rgba(255, 107, 157, 0.25)',
+                    'rgba(255, 62, 109, 0.2)'
+                ];
+                heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Random delay
+                const delay = Math.random() * 8;
+                heart.style.animationDelay = `${delay}s`;
+                
+                floatingHearts.appendChild(heart);
+            }
+        }
+        
+        // Function to start music automatically
+        function startMusic() {
+            // Create a user interaction promise
+            const playPromise = backgroundMusic.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // Music started successfully
+                    isPlaying = true;
+                    musicControl.innerHTML = '<i class="fas fa-pause"></i>';
+                    console.log("Music started automatically");
+                }).catch(error => {
+                    // Auto-play was prevented
+                    console.log("Autoplay prevented. Waiting for user interaction.");
+                    // Show a visual cue that user needs to click
+                    musicControl.style.backgroundColor = "#ff9ebb";
+                    musicControl.style.animation = "pulse 1.5s infinite";
+                    
+                    // Add pulse animation
+                    const style = document.createElement('style');
+                    style.innerHTML = `
+                        @keyframes pulse {
+                            0% { transform: scale(1); }
+                            50% { transform: scale(1.1); }
+                            100% { transform: scale(1); }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                });
+            }
+        }
+        
+        // Music control functionality
+        musicControl.addEventListener('click', () => {
+            if (isPlaying) {
+                backgroundMusic.pause();
+                musicControl.innerHTML = '<i class="fas fa-music"></i>';
+                musicControl.style.animation = 'none';
+            } else {
+                backgroundMusic.play().catch(e => {
+                    console.log("Playback error:", e);
+                });
+                musicControl.innerHTML = '<i class="fas fa-pause"></i>';
+                musicControl.style.animation = 'none';
+            }
+            isPlaying = !isPlaying;
+        });
+        
+        // Typewriter effect for hero text
+        function typewriterEffect() {
+            const text = "Hey...\nI made this just for you ❤️";
+            let i = 0;
+            heroText.innerHTML = '';
+            
+            function typeWriter() {
+                if (i < text.length) {
+                    // Handle newlines
+                    if (text.charAt(i) === '\n') {
+                        heroText.innerHTML += '<br>';
+                    } else {
+                        heroText.innerHTML += text.charAt(i);
+                    }
+                    i++;
+                    setTimeout(typeWriter, 80);
+                }
+            }
+            
+            setTimeout(typeWriter, 300);
+        }
+        
+        // Scroll animations for elements
+        function checkVisibility() {
+            const windowHeight = window.innerHeight;
+            
+            // Check photo frames
+            photoFrames.forEach(frame => {
+                const rect = frame.getBoundingClientRect();
+                if (rect.top < windowHeight - 50) {
+                    frame.classList.add('visible');
+                }
+            });
+            
+            // Check message section
+            const messageRect = messageSection.getBoundingClientRect();
+            if (messageRect.top < windowHeight - 50) {
+                messageSection.classList.add('visible');
+            }
+            
+            // Check question section
+            const questionRect = questionSection.getBoundingClientRect();
+            if (questionRect.top < windowHeight - 50) {
+                questionSection.classList.add('visible');
+            }
+        }
+        
+        // Enhanced heart animation for response
+        function createHearts(count) {
+            heartContainer.style.display = 'block';
+            heartContainer.innerHTML = '';
+            
+            for (let i = 0; i < count; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                
+                // Random heart emoji
+                const hearts = ['❤️', '💖', '💕', '💗', '💓', '💞', '💘'];
+                heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+                
+                // Random position
+                const left = Math.random() * 100;
+                heart.style.left = `${left}%`;
+                
+                // Random animation delay
+                const delay = Math.random() * 0.7;
+                heart.style.animationDelay = `${delay}s`;
+                
+                // Random size
+                const size = 0.5 + Math.random() * 2;
+                heart.style.fontSize = `${24 * size}px`;
+                
+                // Random color
+                const colors = ['#ff3e6d', '#ff6b9d', '#ff9ebb', '#ffb6c1', '#ff1493', '#db7093'];
+                heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Random animation duration
+                const duration = 1.5 + Math.random() * 1;
+                heart.style.animationDuration = `${duration}s`;
+                
+                heartContainer.appendChild(heart);
+            }
+            
+            // Keep hearts visible longer for response
+            setTimeout(() => {
+                heartContainer.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Show enhanced response message
+        function showResponse() {
+            responseMessage.style.display = 'flex';
+            createHearts(50);
+            
+            // Create additional hearts inside the response message
+            setTimeout(() => {
+                createHearts(20);
+            }, 500);
+        }
+        
+        // Button event listeners
+        yesButton.addEventListener('click', showResponse);
+        ofCourseButton.addEventListener('click', showResponse);
+        
+        // Close response message
+        closeButton.addEventListener('click', () => {
+            responseMessage.style.display = 'none';
+            createHearts(15); // Few more hearts when closing
+        });
+        
+        // Add fallback images if the specified ones don't load
+        function addImageFallbacks() {
+            const images = document.querySelectorAll('.photo-img');
+            
+            images.forEach(img => {
+                img.addEventListener('error', function() {
+                    // If image fails to load, use a gradient background
+                    this.style.background = 'linear-gradient(45deg, #ffccd5, #ffb6c1)';
+                    this.style.display = 'flex';
+                    this.style.justifyContent = 'center';
+                    this.style.alignItems = 'center';
+                    this.style.color = '#d46a8c';
+                    this.style.fontSize = '1.1rem';
+                    this.style.textAlign = 'center';
+                    this.style.padding = '15px';
+                    this.style.fontWeight = '600';
+                    
+                    // Set appropriate placeholder text
+                    const parentFrame = this.closest('.photo-frame');
+                    if (parentFrame.id === 'photo1') {
+                        this.innerHTML = 'Us Together';
+                    } else if (parentFrame.id === 'photo2') {
+                        this.innerHTML = 'Your Smile';
+                    } else if (parentFrame.id === 'photo3') {
+                        this.innerHTML = 'My Favorite Person';
+                    } else if (parentFrame.id === 'photo4') {
+                        this.innerHTML = 'My Happy Place';
+                    }
+                });
+            });
+        }
+        
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            // Create floating hearts
+            createFloatingHearts();
+            
+            // Add image fallbacks
+            addImageFallbacks();
+            
+            // Start typewriter effect
+            typewriterEffect();
+            
+            // Add scroll listener for animations
+            window.addEventListener('scroll', checkVisibility);
+            
+            // Initial check for elements in view
+            checkVisibility();
+            
+            // Try to start music automatically
+            setTimeout(() => {
+                startMusic();
+            }, 500);
+            
+            // Also try to start music on any user interaction
+            document.addEventListener('click', () => {
+                if (!isPlaying) {
+                    startMusic();
+                }
+            }, { once: true });
+        });
+        
+        // Add some interactive hover effects for photos
+        photoFrames.forEach(frame => {
+            frame.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.03)';
+            });
+            
+            frame.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
